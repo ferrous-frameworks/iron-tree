@@ -1,0 +1,10 @@
+
+npm-debug.log
+
+iron-tree.iws
+
+node_modules/
+.idea/
+
+src/**/*.js
+src/**/*.js.map
