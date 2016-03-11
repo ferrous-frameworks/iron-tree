@@ -5,6 +5,7 @@ iron-tree.iws
 
 node_modules/
 .idea/
+.c9
 
 src/**/*.js
 src/**/*.js.map
