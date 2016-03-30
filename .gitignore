@@ -6,6 +6,7 @@ iron-tree.iws
 node_modules/
 .idea/
 .c9
+.DS_Store
 
 src/**/*.js
 src/**/*.js.map
