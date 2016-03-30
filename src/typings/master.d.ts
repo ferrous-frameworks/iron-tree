@@ -1,2 +1,2 @@
 
-///<reference path='./tsd/tsd.d.ts' />
+///<reference path='../../typings/main.d.ts' />
