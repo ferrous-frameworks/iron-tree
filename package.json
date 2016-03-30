@@ -1,6 +1,6 @@
 {
   "name": "iron-tree",
-  "version": "0.0.4",
+  "version": "0.0.10",
   "description": "",
   "main": "dist/tree/iron-tree.js",
   "scripts": {
@@ -11,21 +11,21 @@
     "url": "https://github.com/ferrous-frameworks/iron-tree.git"
   },
   "author": "Tyson Hester",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/ferrous-frameworks/iron-tree/issues"
   },
   "homepage": "https://github.com/ferrous-frameworks/iron-tree#readme",
   "devDependencies": {
-    "findit": "^2.0.0",
     "chai": "^3.2.0",
+    "findit": "^2.0.0",
     "grunt": "^0.4.5",
     "grunt-bump": "^0.3.1",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-copy": "^0.8.1",
     "grunt-mocha-test": "^0.12.7",
     "grunt-shell": "^1.1.2",
-    "mocha": "^2.2.5",
-    "grunt-contrib-clean": "^0.6.0",
-    "grunt-contrib-copy": "^0.8.1"
+    "mocha": "^2.2.5"
   },
   "dependencies": {
     "async": "^1.4.0",
