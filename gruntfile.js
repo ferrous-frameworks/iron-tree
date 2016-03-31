@@ -99,9 +99,6 @@ module.exports = function(grunt) {
                     cwd: 'src/',
                     src: ['**/*.js', '*.d.ts', '!**/*.test.js'],
                     dest: 'dist/'
-                }, {
-                    src: ['CONTRIBUTORS.md','LICENSE','README.md','package.json'],
-                    dest: 'dist/'
                 }]
             }
         },
