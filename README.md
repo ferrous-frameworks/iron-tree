@@ -3,7 +3,7 @@
 
 iron-tree is a object tree designed to allow modifying objects based on keys containing one or multiple wildcard delimiters.
 
-[Documentation](http://)*COMING SOON*
+[Documentation](http://) *(coming soon)*
 
 ## Installation
 
