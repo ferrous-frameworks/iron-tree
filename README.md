@@ -52,5 +52,7 @@ done();
 
 ## Features
 
-- Wildcards
-- 
+- Multiple Wildcards
+- Add Children
+- Remove Children
+- Array of objects with matching pattern
