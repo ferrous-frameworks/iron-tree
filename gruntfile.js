@@ -99,11 +99,30 @@ module.exports = function(grunt) {
                     cwd: 'src/',
                     src: ['**/*.js', '*.d.ts', '!**/*.test.js'],
                     dest: 'dist/'
+                }, {
+                    expand: true,
+                    src: 'typings/**/*.*',
+                    dest: 'dist/'
                 }]
             }
         },
         clean: {
             dist: [ "dist" ]
+        },
+        replace: {
+            dist: {
+                options: {
+                    patterns: [
+                        {
+                            match: /\.\.\/\.\.\/typings\/main/,
+                            replacement: "./main"
+                        }
+                    ]
+                },
+                files: [
+                    {expand: true, flatten: true, src: ['dist/typings/master.d.ts'], dest: 'dist/typings'}
+                ]
+            }
         }
 
         //Typedoc 1.5 compatiblity not ready
@@ -129,6 +148,7 @@ module.exports = function(grunt) {
         'shell:tsc',
         'clean:dist',
         'copy:dist',
+        'replace:dist',
         'shell:addDistToGit'
     ]);
 

@@ -1,6 +1,8 @@
 {
   "name": "iron-tree",
-  "version": true,
+  "version": "0.0.14",
+  "main": "dist/iron-tree.d.ts",
+  "homepage": "https://github.com/ferrous-frameworks/iron-tree",
   "ambientDependencies": {
     "mocha": "github:DefinitelyTyped/DefinitelyTyped/mocha/mocha.d.ts#9e42013818dbb33142146afd739bdf70b87c37f9",
     "chai": "github:DefinitelyTyped/DefinitelyTyped/chai/chai.d.ts#9e42013818dbb33142146afd739bdf70b87c37f9",
