@@ -1,6 +1,4 @@
 
-///<reference path='../typings/main.d.ts' />
-
 declare module "iron-tree" {
     export class Tree<T> {
         constructor(opts?);
