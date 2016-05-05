@@ -148,7 +148,6 @@ module.exports = function(grunt) {
         'shell:tsc',
         'clean:dist',
         'copy:dist',
-        'replace:dist',
         'shell:addDistToGit'
     ]);
 
