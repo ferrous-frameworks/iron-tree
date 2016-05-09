@@ -1,4 +1,4 @@
-//<reference path='../typings/master.d.ts' />
+//<reference path='../../typings/main.d.ts' />
 
 import _ = require('lodash');
 
@@ -84,7 +84,7 @@ export class Tree<T> {
                 };
                 level.push(branch);
             }
-            key = _.rest(key);
+            key = <any>_.rest(<any>key);
             if (key.length === 0) {
                 return branch;
             }
@@ -108,7 +108,7 @@ export class Tree<T> {
             });
             _.each(branches, (branch) => {
                 if (keyArr.length > 1) {
-                    var childMatches = this.get(_.rest(keyArr), branch.children, levels);
+                    var childMatches = <any>this.get(<any>_.rest(<any>keyArr), branch.children, levels);
                     matches = matches.concat(childMatches);
                 }
                 else if ((levels - (levels - keyArr.length)) === 1) {
