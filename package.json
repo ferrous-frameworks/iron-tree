@@ -1,6 +1,6 @@
 {
   "name": "iron-tree",
-  "version": "0.0.29",
+  "version": "0.0.30",
   "description": "",
   "main": "dist/iron-tree.js",
   "scripts": {
