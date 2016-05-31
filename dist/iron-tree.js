@@ -1,19 +1,8 @@
-//<reference path='../../typings/main.d.ts' />
-
-import _ = require('lodash');
-
-interface IElement<T> {
-    key: string;
-    elements: T[];
-    children: IElement<T>[];
-}
-
-export class Tree<T> {
-    private wildcard: string;
-    private delimiter: string;
-    private tree: IElement<T>[];
-
-    constructor(opts?) {
+//<reference path='../typings/main.d.ts' />
+"use strict";
+var _ = require('lodash');
+var Tree = (function () {
+    function Tree(opts) {
         opts = _.isUndefined(opts) ? {} : opts;
         opts = _.extend({
             delimiter: '.',
@@ -23,39 +12,36 @@ export class Tree<T> {
         this.delimiter = opts.delimiter;
         this.tree = [];
     }
-
-    public isEmpty(): boolean {
+    Tree.prototype.isEmpty = function () {
         return this.tree.length === 0;
-    }
-
-    public add(key: string|string[], element: T): Tree<T> {
-        var keyArr: string[] = this.getKeyArray(key);
+    };
+    Tree.prototype.add = function (key, element) {
+        var keyArr = this.getKeyArray(key);
         var branch = this.getBranch(keyArr);
         branch.elements.push(element);
         return this;
-    }
-
-    public remove(key?: string|string[], element?: T, removeChildKey?: string): Tree<T> {
+    };
+    Tree.prototype.remove = function (key, element, removeChildKey) {
         if (_.isUndefined(key)) {
             this.tree = [];
         }
         else {
-            var keyArr: string[] = this.getKeyArray(key);
+            var keyArr = this.getKeyArray(key);
             var branch = this.getBranch(keyArr);
             if (!_.isUndefined(branch)) {
                 if (_.isUndefined(removeChildKey)) {
-                    branch.elements = _.filter(branch.elements, (el) => {
+                    branch.elements = _.filter(branch.elements, function (el) {
                         return !_.isUndefined(element) && element !== el;
                     });
                 }
                 else {
-                    branch.children = _.filter(branch.children, (child) => {
+                    branch.children = _.filter(branch.children, function (child) {
                         return child.key !== removeChildKey;
                     });
                 }
                 if (branch.elements.length === 0 && branch.children.length === 0) {
                     if (keyArr.length === 1) {
-                        this.tree = _.filter(this.tree, (el) => {
+                        this.tree = _.filter(this.tree, function (el) {
                             return el.key !== keyArr[0];
                         });
                     }
@@ -66,13 +52,12 @@ export class Tree<T> {
             }
         }
         return this;
-    }
-
-    private getBranch(key: string[], level?: IElement<T>[]): IElement<T> {
+    };
+    Tree.prototype.getBranch = function (key, level) {
         if (_.isUndefined(level)) {
             level = this.tree;
         }
-        var branch = _.find<IElement<T>>(level, (el) => {
+        var branch = _.find(level, function (el) {
             return el.key === key[0];
         });
         if (key.length > 0) {
@@ -84,31 +69,31 @@ export class Tree<T> {
                 };
                 level.push(branch);
             }
-            key = <any>_.rest(<any>key);
+            key = _.rest(key);
             if (key.length === 0) {
                 return branch;
             }
             return this.getBranch(key, branch.children);
         }
-    }
-
-    public get(key: string|string[], level?: IElement<T>[], levels?: number): T[] {
+    };
+    Tree.prototype.get = function (key, level, levels) {
+        var _this = this;
         var matches = [];
         if (_.isUndefined(level)) {
             level = this.tree;
         }
-        var keyArr: string[] = this.getKeyArray(key);
+        var keyArr = this.getKeyArray(key);
         if (keyArr.length > 0) {
             if (_.isUndefined(levels)) {
                 levels = keyArr.length;
             }
             var instance = this;
-            var branches = _.filter(level, (el) => {
+            var branches = _.filter(level, function (el) {
                 return el.key === keyArr[0] || instance.matchWildcard(keyArr[0]) || instance.matchWildcard(el.key);
             });
-            _.each(branches, (branch) => {
+            _.each(branches, function (branch) {
                 if (keyArr.length > 1) {
-                    var childMatches = <any>this.get(<any>_.rest(<any>keyArr), branch.children, levels);
+                    var childMatches = _this.get(_.rest(keyArr), branch.children, levels);
                     matches = matches.concat(childMatches);
                 }
                 else if ((levels - (levels - keyArr.length)) === 1) {
@@ -117,45 +102,43 @@ export class Tree<T> {
             });
         }
         return matches;
-    }
-
-    public getAll(level?: IElement<T>[]): T[] {
+    };
+    Tree.prototype.getAll = function (level) {
+        var _this = this;
         var matches = [];
         if (_.isUndefined(level)) {
             level = this.tree;
         }
-        _.each(level, (branch) => {
-            var childMatches = this.getAll(branch.children);
+        _.each(level, function (branch) {
+            var childMatches = _this.getAll(branch.children);
             matches = matches.concat(childMatches);
             matches = matches.concat(branch.elements);
         });
         return matches;
-    }
-
-    public getTrunk(branchKey: string): T[] {
+    };
+    Tree.prototype.getTrunk = function (branchKey) {
         var fullBranchKey = this.getFullKey(branchKey);
         return _.isUndefined(fullBranchKey) ? [] : this.getTrunkForBranch(fullBranchKey);
-    }
-
-    public getBranches(branchKey: string): T[] {
+    };
+    Tree.prototype.getBranches = function (branchKey) {
         var fullBranchKey = this.getFullKey(branchKey);
         if (!_.isUndefined(fullBranchKey)) {
             var branch = this.getBranch(fullBranchKey);
-            return this.getAll([ branch ]).reverse();
+            return this.getAll([branch]).reverse();
         }
         else {
             return [];
         }
-    }
-
-    private getFullKey(branchKey: string, level?: IElement<T>[], builtKey?: string[]): string[] {
+    };
+    Tree.prototype.getFullKey = function (branchKey, level, builtKey) {
+        var _this = this;
         if (_.isUndefined(level)) {
             level = this.tree;
         }
         if (!_.isArray(builtKey)) {
             builtKey = [];
         }
-        var branch = _.find<IElement<T>>(level, (el) => {
+        var branch = _.find(level, function (el) {
             return el.key === branchKey;
         });
         if (!_.isUndefined(branch)) {
@@ -164,10 +147,10 @@ export class Tree<T> {
         }
         else {
             var fullKey = void 0;
-            _.each(level, (branch) => {
+            _.each(level, function (branch) {
                 var branchBuiltKey = _.clone(builtKey);
                 branchBuiltKey.push(branch.key);
-                var fullBranchKey = this.getFullKey(branchKey, branch.children, branchBuiltKey);
+                var fullBranchKey = _this.getFullKey(branchKey, branch.children, branchBuiltKey);
                 if (!_.isUndefined(fullBranchKey)) {
                     fullKey = fullBranchKey;
                     return;
@@ -175,9 +158,8 @@ export class Tree<T> {
             });
             return fullKey;
         }
-    }
-
-    private getTrunkForBranch(key: string[], matches?: T[]): T[] {
+    };
+    Tree.prototype.getTrunkForBranch = function (key, matches) {
         if (!_.isArray(matches)) {
             matches = [];
         }
@@ -188,15 +170,16 @@ export class Tree<T> {
             matches = this.getTrunkForBranch(key, matches);
         }
         return matches.reverse();
-    }
-
-    private getKeyArray(key: string|string[]): string[] {
+    };
+    Tree.prototype.getKeyArray = function (key) {
         return _.isArray(key)
-            ? <string[]>key
-            : (<string>key).split(this.delimiter);
-    }
-
-    private matchWildcard(key: string) {
+            ? key
+            : key.split(this.delimiter);
+    };
+    Tree.prototype.matchWildcard = function (key) {
         return !_.isUndefined(this.wildcard) && this.wildcard === key;
-    }
-}
+    };
+    return Tree;
+}());
+exports.Tree = Tree;
+//# sourceMappingURL=iron-tree.js.map
