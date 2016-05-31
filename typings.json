@@ -1,6 +1,6 @@
 {
   "name": "iron-tree",
-  "version": "0.0.24",
+  "version": "0.0.25",
   "main": "dist/iron-tree.d.ts",
   "homepage": "https://github.com/ferrous-frameworks/iron-tree",
   "devDependencies": {
