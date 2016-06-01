@@ -1,6 +1,4 @@
 
-///<reference path='../typings/index.d.ts' />
-
 import chai = require('chai');
 var expect = chai.expect;
 
