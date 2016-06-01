@@ -1,4 +1,3 @@
-"use strict";
 var _ = require('lodash');
 var Tree = (function () {
     function Tree(opts) {
@@ -179,6 +178,6 @@ var Tree = (function () {
         return !_.isUndefined(this.wildcard) && this.wildcard === key;
     };
     return Tree;
-}());
+})();
 exports.Tree = Tree;
 //# sourceMappingURL=iron-tree.js.map
