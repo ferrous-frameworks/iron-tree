@@ -18,8 +18,8 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
-    
-    
+
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
@@ -141,7 +141,7 @@ module.exports = function(grunt) {
 
 
     grunt.registerTask('prep', [
-        'shell:typings'
+        //'shell:typings'
     ]);
 
     grunt.registerTask('build', [
