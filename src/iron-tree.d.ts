@@ -1,5 +1,5 @@
 
-/// <reference path='../typings/index.d.ts' />
+/// <reference path='./typings/index.d.ts' />
 
 export class Tree<T> {
 	constructor(opts?);
