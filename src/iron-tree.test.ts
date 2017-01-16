@@ -7,7 +7,7 @@ import _ = require('lodash');
 import IronTree = require('./iron-tree');
 
 describe('iron-tree', () => {
-    it("should add elements" , (done) => {
+    it("should add elements", (done) => {
         var t = new IronTree.Tree<any>();
         var data = 'data';
         var key = 'test';
@@ -22,7 +22,7 @@ describe('iron-tree', () => {
         done();
     });
 
-    it("should add child elements" , (done) => {
+    it("should add child elements", (done) => {
         var t = new IronTree.Tree<any>();
         var data = 'data';
         var key = 'test.test';
@@ -37,7 +37,7 @@ describe('iron-tree', () => {
         done();
     });
 
-    it("should add multiple elements" , (done) => {
+    it("should add multiple elements", (done) => {
         var t = new IronTree.Tree<any>();
         var key = 'test';
         t.add(key, {
@@ -56,7 +56,7 @@ describe('iron-tree', () => {
         done();
     });
 
-    it("should add multiple child elements" , (done) => {
+    it("should add multiple child elements", (done) => {
         var t = new IronTree.Tree<any>();
         var key = 'test.test';
         t.add(key, {
@@ -75,7 +75,7 @@ describe('iron-tree', () => {
         done();
     });
 
-    it("should add 3+ child elements" , (done) => {
+    it("should add 3+ child elements", (done) => {
         var t = new IronTree.Tree<any>();
         var key = 'test.test.test';
         t.add(key, {
@@ -94,7 +94,7 @@ describe('iron-tree', () => {
         done();
     });
 
-    it("should add 3+ child elements with data on each" , (done) => {
+    it("should add 3+ child elements with data on each", (done) => {
         var t = new IronTree.Tree<any>();
         t.add('test', {
             some: "data1"
@@ -147,7 +147,7 @@ describe('iron-tree', () => {
         done();
     });
 
-    it("should remove all elements if no element is passed" , (done) => {
+    it("should remove all elements if no element is passed", (done) => {
         var t = new IronTree.Tree<any>();
         var key = 'test.test.test';
         t.add(key, {
@@ -163,7 +163,7 @@ describe('iron-tree', () => {
         done();
     });
 
-    it("should remove the element that is passed in" , (done) => {
+    it("should remove the element that is passed in", (done) => {
         var t = new IronTree.Tree<any>();
         var key = 'test.test.test';
         var test = {
@@ -182,7 +182,7 @@ describe('iron-tree', () => {
         done();
     });
 
-    it("should remove the element that is passed in event if it is the last root element" , (done) => {
+    it("should remove the element that is passed in event if it is the last root element", (done) => {
         var t = new IronTree.Tree<any>();
         var key = 'test';
         var test = {
@@ -196,7 +196,7 @@ describe('iron-tree', () => {
         done();
     });
 
-    it("should remove all elements from the tree is no key is passed" , (done) => {
+    it("should remove all elements from the tree is no key is passed", (done) => {
         var t = new IronTree.Tree<any>();
         t.add('test', {
             some: "data1"
@@ -239,7 +239,7 @@ describe('iron-tree', () => {
         done();
     });
 
-    it("should handle wildcards at the end of the key sections" , (done) => {
+    it("should handle wildcards at the end of the key sections", (done) => {
         var t = new IronTree.Tree<any>({
             wildcard: '*'
         });
@@ -260,7 +260,7 @@ describe('iron-tree', () => {
         done();
     });
 
-    it("should handle wildcards at the end of the key sections with multiple elements" , (done) => {
+    it("should handle wildcards at the end of the key sections with multiple elements", (done) => {
         var t = new IronTree.Tree<any>({
             wildcard: '*'
         });
@@ -287,7 +287,7 @@ describe('iron-tree', () => {
         done();
     });
 
-    it("should handle wildcards at the beginning of the key sections with multiple elements" , (done) => {
+    it("should handle wildcards at the beginning of the key sections with multiple elements", (done) => {
         var t = new IronTree.Tree<any>({
             wildcard: '*'
         });
@@ -313,7 +313,193 @@ describe('iron-tree', () => {
         done();
     });
 
-    it("should handle wildcards in the middle of the key sections" , (done) => {
+    it("should return all elements if getting only a wildcard, if globalWildcardMatch opt is set", (done) => {
+        var t = new IronTree.Tree<any>({
+            wildcard: '*',
+            globalWildcardMatch: true
+        });
+        t.add('test', {
+            some: "data"
+        });
+        t.add('test.1', {
+            some: "data1"
+        });
+        t.add('test.2', {
+            some: "data2"
+        });
+        t.add('test.test.3', {
+            some: "data3"
+        });
+        
+        var some = t.get('*');
+        expect(_.isArray(some)).to.be.true;
+        expect(some.length).to.be.equal(4);
+        expect(some[0]).to.not.be.an('undefined');
+        expect(some[0].some).to.be.equal("data");
+        expect(some[1]).to.not.be.an('undefined');
+        expect(some[1].some).to.be.equal("data1");
+        expect(some[2]).to.not.be.an('undefined');
+        expect(some[2].some).to.be.equal("data2");
+        expect(some[3]).to.not.be.an('undefined');
+        expect(some[3].some).to.be.equal("data3");
+
+        done();
+    });
+
+    it("should return all elements of a given level if level of get is only a wildcard, if cascadingWildcardMatch opt is set", (done) => {
+        var t = new IronTree.Tree<any>({
+            wildcard: '*',
+            cascadingWildcardMatch: true
+        });
+        t.add('test', {
+            some: "data"
+        });
+        t.add('test.1', {
+            some: "data1"
+        });
+        t.add('test.2', {
+            some: "data2"
+        });
+
+        var some = t.get('*.*');
+        expect(_.isArray(some)).to.be.true;
+        expect(some.length).to.be.equal(3);
+        expect(some[0]).to.not.be.an('undefined');
+        expect(some[0].some).to.be.equal("data");
+        expect(some[1]).to.not.be.an('undefined');
+        expect(some[1].some).to.be.equal("data1");
+        expect(some[2]).to.not.be.an('undefined');
+        expect(some[2].some).to.be.equal("data2");
+
+        done();
+    });
+
+    it("should return only all elements of a given level if level of get is only a wildcard, if cascadingWildcardMatch opt is set", (done) => {
+        var t = new IronTree.Tree<any>({
+            wildcard: '*',
+            cascadingWildcardMatch: true
+        });
+        t.add('test', {
+            some: "data"
+        });
+        t.add('test.1', {
+            some: "data1"
+        });
+        t.add('test.2', {
+            some: "data2"
+        });
+
+        var some = t.get('test.*');
+        expect(_.isArray(some)).to.be.true;
+        expect(some.length).to.be.equal(2);
+        expect(some[0]).to.not.be.an('undefined');
+        expect(some[0].some).to.be.equal("data1");
+        expect(some[1]).to.not.be.an('undefined');
+        expect(some[1].some).to.be.equal("data2");
+
+        done();
+    });
+
+    it("should return only all elements of a given level if level of get is only a wildcard and all subsequent levels, if cascadingWildcardMatch opt is set", (done) => {
+        var t = new IronTree.Tree<any>({
+            wildcard: '*',
+            cascadingWildcardMatch: true
+        });
+        t.add('test', {
+            some: "data"
+        });
+        t.add('test.1', {
+            some: "data1"
+        });
+        t.add('test.2', {
+            some: "data2"
+        });
+        t.add('test.2.3', {
+            some: "data23"
+        });
+
+        var some = t.get('test.*');
+        expect(_.isArray(some)).to.be.true;
+        expect(some.length).to.be.equal(3);
+        expect(some[0]).to.not.be.an('undefined');
+        expect(some[0].some).to.be.equal("data1");
+        expect(some[1]).to.not.be.an('undefined');
+        expect(some[1].some).to.be.equal("data2");
+        expect(some[2]).to.not.be.an('undefined');
+        expect(some[2].some).to.be.equal("data23");
+
+        done();
+    });
+
+    it("should return only all elements of a given level if level of get is only a wildcard and all levels match, if cascadingWildcardMatch opt is set", (done) => {
+        var t = new IronTree.Tree<any>({
+            wildcard: '*',
+            cascadingWildcardMatch: true
+        });
+        t.add('test.0.test', {
+            some: "data"
+        });
+        t.add('test.1.test', {
+            some: "data1"
+        });
+        t.add('test.2.test', {
+            some: "data2"
+        });
+        t.add('not-test.3.test', {
+            some: "data3"
+        });
+        t.add('test.4.not-test', {
+            some: "data4"
+        });
+
+        var some = t.get('test.*.test');
+        expect(_.isArray(some)).to.be.true;
+        expect(some.length).to.be.equal(3);
+        expect(some[0]).to.not.be.an('undefined');
+        expect(some[0].some).to.be.equal("data");
+        expect(some[1]).to.not.be.an('undefined');
+        expect(some[1].some).to.be.equal("data1");
+        expect(some[2]).to.not.be.an('undefined');
+        expect(some[2].some).to.be.equal("data2");
+
+        done();
+    });
+
+    it("should return only all elements of a given level if level of get is only a wildcard and all levels match with back to back wildcards, if cascadingWildcardMatch opt is set", (done) => {
+        var t = new IronTree.Tree<any>({
+            wildcard: '*',
+            cascadingWildcardMatch: true
+        });
+        t.add('test.0.0.test', {
+            some: "data"
+        });
+        t.add('test.1.1.test', {
+            some: "data1"
+        });
+        t.add('test.2.2.test', {
+            some: "data2"
+        });
+        t.add('not-test.3.3.test', {
+            some: "data3"
+        });
+        t.add('test.4.4.not-test', {
+            some: "data4"
+        });
+
+        var some = t.get('test.*.*.test');
+        expect(_.isArray(some)).to.be.true;
+        expect(some.length).to.be.equal(3);
+        expect(some[0]).to.not.be.an('undefined');
+        expect(some[0].some).to.be.equal("data");
+        expect(some[1]).to.not.be.an('undefined');
+        expect(some[1].some).to.be.equal("data1");
+        expect(some[2]).to.not.be.an('undefined');
+        expect(some[2].some).to.be.equal("data2");
+
+        done();
+    });
+
+    it("should handle wildcards in the middle of the key sections", (done) => {
         var t = new IronTree.Tree<any>({
             wildcard: '*'
         });

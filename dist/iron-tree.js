@@ -1,14 +1,18 @@
 "use strict";
-var _ = require('lodash');
+var _ = require("lodash");
 var Tree = (function () {
     function Tree(opts) {
         opts = _.isUndefined(opts) ? {} : opts;
         opts = _.extend({
             delimiter: '.',
-            wildcard: '*'
+            wildcard: '*',
+            globalWildcardMatch: false,
+            cascadingWildcardMatch: false
         }, opts);
         this.wildcard = opts.wildcard;
         this.delimiter = opts.delimiter;
+        this.cascadingWildcardMatch = opts.cascadingWildcardMatch;
+        this.globalWildcardMatch = opts.cascadingWildcardMatch || opts.globalWildcardMatch;
         this.tree = [];
     }
     Tree.prototype.isEmpty = function () {
@@ -82,7 +86,14 @@ var Tree = (function () {
             level = this.tree;
         }
         var keyArr = this.getKeyArray(key);
-        if (keyArr.length > 0) {
+        if (this.globalWildcardMatch && _.isUndefined(levels) && keyArr.length == 1 && keyArr[0] == this.wildcard) {
+            _.each(level, function (el) {
+                matches = matches.concat(el.elements);
+                var childMatches = _this.get([_this.wildcard], el.children);
+                matches = matches.concat(childMatches);
+            });
+        }
+        else if (keyArr.length > 0) {
             if (_.isUndefined(levels)) {
                 levels = keyArr.length;
             }
@@ -91,7 +102,13 @@ var Tree = (function () {
                 return el.key === keyArr[0] || instance.matchWildcard(keyArr[0]) || instance.matchWildcard(el.key);
             });
             _.each(branches, function (branch) {
-                if (keyArr.length > 1) {
+                if (_this.cascadingWildcardMatch && keyArr[0] == _this.wildcard) {
+                    matches = matches.concat(branch.elements);
+                    var next = keyArr.length == 1 ? [_this.wildcard] : _.rest(keyArr);
+                    var childMatches = _this.get(next, branch.children, levels);
+                    matches = matches.concat(childMatches);
+                }
+                else if (keyArr.length > 1) {
                     var childMatches = _this.get(_.rest(keyArr), branch.children, levels);
                     matches = matches.concat(childMatches);
                 }

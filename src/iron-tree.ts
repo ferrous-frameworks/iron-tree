@@ -11,15 +11,21 @@ export class Tree<T> {
     private wildcard: string;
     private delimiter: string;
     private tree: IElement<T>[];
+    private globalWildcardMatch: boolean;
+    private cascadingWildcardMatch: boolean;
 
     constructor(opts?) {
         opts = _.isUndefined(opts) ? {} : opts;
         opts = _.extend({
             delimiter: '.',
-            wildcard: '*'
+            wildcard: '*',
+            globalWildcardMatch: false,
+            cascadingWildcardMatch: false
         }, opts);
         this.wildcard = opts.wildcard;
         this.delimiter = opts.delimiter;
+        this.cascadingWildcardMatch = opts.cascadingWildcardMatch;
+        this.globalWildcardMatch = opts.cascadingWildcardMatch || opts.globalWildcardMatch;
         this.tree = [];
     }
 
@@ -97,7 +103,14 @@ export class Tree<T> {
             level = this.tree;
         }
         var keyArr: string[] = this.getKeyArray(key);
-        if (keyArr.length > 0) {
+        if (this.globalWildcardMatch && _.isUndefined(levels) && keyArr.length == 1 && keyArr[0] == this.wildcard) {
+            _.each(level, (el) => {
+                matches = matches.concat(el.elements);
+                var childMatches = <any>this.get([ this.wildcard ], el.children);
+                matches = matches.concat(childMatches);
+            });
+        }
+        else if (keyArr.length > 0) {
             if (_.isUndefined(levels)) {
                 levels = keyArr.length;
             }
@@ -106,7 +119,13 @@ export class Tree<T> {
                 return el.key === keyArr[0] || instance.matchWildcard(keyArr[0]) || instance.matchWildcard(el.key);
             });
             _.each(branches, (branch) => {
-                if (keyArr.length > 1) {
+                if (this.cascadingWildcardMatch && keyArr[0] == this.wildcard) {
+                    matches = matches.concat(branch.elements);
+                    var next = keyArr.length == 1 ? [ this.wildcard ] : <any>_.rest(<any>keyArr);
+                    var childMatches = <any>this.get(next, branch.children, levels);
+                    matches = matches.concat(childMatches);
+                }
+                else if (keyArr.length > 1) {
                     var childMatches = <any>this.get(<any>_.rest(<any>keyArr), branch.children, levels);
                     matches = matches.concat(childMatches);
                 }
