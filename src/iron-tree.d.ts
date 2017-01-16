@@ -6,6 +6,7 @@ declare module "iron-tree" {
 		constructor(opts?);
 		public isEmpty(): boolean;
 		public add(key: string|string[], element: T): Tree<T>;
+		public prepend(key: string|string[], element: T): Tree<T>;
 		public remove(key?: string|string[], element?: T): Tree<T>;
 		public get(key: string|string[]): T[];
 		public getAll(): T[];

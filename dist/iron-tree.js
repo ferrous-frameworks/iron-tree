@@ -24,6 +24,12 @@ var Tree = (function () {
         branch.elements.push(element);
         return this;
     };
+    Tree.prototype.prepend = function (key, element) {
+        var keyArr = this.getKeyArray(key);
+        var branch = this.getBranch(keyArr);
+        branch.elements.unshift(element);
+        return this;
+    };
     Tree.prototype.remove = function (key, element, removeChildKey) {
         if (_.isUndefined(key)) {
             this.tree = [];

@@ -40,6 +40,13 @@ export class Tree<T> {
         return this;
     }
 
+    public prepend(key: string|string[], element: T): Tree<T> {
+        var keyArr: string[] = this.getKeyArray(key);
+        var branch = this.getBranch(keyArr);
+        branch.elements.unshift(element);
+        return this;
+    }
+
     public remove(key?: string|string[], element?: T, removeChildKey?: string): Tree<T> {
         if (_.isUndefined(key)) {
             this.tree = [];

@@ -625,4 +625,20 @@ describe('iron-tree', () => {
         expect(elements[2]).to.be.equal('test2');
         done();
     });
+    
+    it("should provide a 'prepend' function that adds an element to the beginning the branches list", (done) => {
+        var t = new IronTree.Tree<string>();
+        t.add('test', 'test1');
+        t.add('test', 'test-removed');
+        t.add('test', 'test2');
+        t.remove('test', 'test-removed');
+        t.prepend('test', 'test0');
+        var elements = t.get('test');
+        expect(elements).to.be.an('array');
+        expect(elements.length).to.be.equal(3);
+        expect(elements[0]).to.be.equal('test0');
+        expect(elements[1]).to.be.equal('test1');
+        expect(elements[2]).to.be.equal('test2');
+        done();
+    });
 });
