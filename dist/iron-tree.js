@@ -128,8 +128,8 @@ var Tree = (function () {
         }
         _.each(level, function (branch) {
             var childMatches = _this.getAll(branch.children);
-            matches = matches.concat(childMatches);
             matches = matches.concat(branch.elements);
+            matches = matches.concat(childMatches);
         });
         return matches;
     };
@@ -141,7 +141,7 @@ var Tree = (function () {
         var fullBranchKey = this.getFullKey(branchKey);
         if (!_.isUndefined(fullBranchKey)) {
             var branch = this.getBranch(fullBranchKey);
-            return this.getAll([branch]).reverse();
+            return this.getAll([branch]);
         }
         else {
             return [];
