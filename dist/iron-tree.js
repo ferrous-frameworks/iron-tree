@@ -102,14 +102,15 @@ var Tree = (function () {
                 return el.key === keyArr[0] || instance.matchWildcard(keyArr[0]) || instance.matchWildcard(el.key);
             });
             _.each(branches, function (branch) {
+                var childMatches;
                 if (_this.cascadingWildcardMatch && keyArr[0] == _this.wildcard) {
                     matches = matches.concat(branch.elements);
                     var next = keyArr.length == 1 ? [_this.wildcard] : _.rest(keyArr);
-                    var childMatches = _this.get(next, branch.children, levels);
+                    childMatches = _this.get(next, branch.children, levels);
                     matches = matches.concat(childMatches);
                 }
                 else if (keyArr.length > 1) {
-                    var childMatches = _this.get(_.rest(keyArr), branch.children, levels);
+                    childMatches = _this.get(_.rest(keyArr), branch.children, levels);
                     matches = matches.concat(childMatches);
                 }
                 else if ((levels - (levels - keyArr.length)) === 1) {

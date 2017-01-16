@@ -119,14 +119,15 @@ export class Tree<T> {
                 return el.key === keyArr[0] || instance.matchWildcard(keyArr[0]) || instance.matchWildcard(el.key);
             });
             _.each(branches, (branch) => {
+                var childMatches;
                 if (this.cascadingWildcardMatch && keyArr[0] == this.wildcard) {
                     matches = matches.concat(branch.elements);
                     var next = keyArr.length == 1 ? [ this.wildcard ] : <any>_.rest(<any>keyArr);
-                    var childMatches = <any>this.get(next, branch.children, levels);
+                    childMatches = <any>this.get(next, branch.children, levels);
                     matches = matches.concat(childMatches);
                 }
                 else if (keyArr.length > 1) {
-                    var childMatches = <any>this.get(<any>_.rest(<any>keyArr), branch.children, levels);
+                    childMatches = <any>this.get(<any>_.rest(<any>keyArr), branch.children, levels);
                     matches = matches.concat(childMatches);
                 }
                 else if ((levels - (levels - keyArr.length)) === 1) {
